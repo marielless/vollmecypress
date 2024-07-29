@@ -2,12 +2,15 @@ describe('Página de cadastro', () => {
     beforeEach(() => {
         cy.visit('/');
     })
-
-    it('Clica no link "Cadastra-se" e redireciona para a página de cadastro da clínica', () => {
-        cy.get('[href="/cadastro"]').click();
-
+context('Verifica redirecionamento de página', ()=> {
+        it('Clica no link "Cadastra-se" e redireciona para a página de cadastro da clínica', () => {
+            cy.get('[href="/cadastro"]').click();
+            cy.location('pathname').should('equal', '/cadastro')
+        
+        })
     })
-
+    
+context('Primeira parte da sessão de cadastro', ()=> {
     it('Digita dados da clínica e exibe a área para inserção de dados técnicos', () => {
         cy.get('[href="/cadastro"]').click();
         cy.get('[data-test="inputNome"]').type('Catarina P');
@@ -16,10 +19,13 @@ describe('Página de cadastro', () => {
         cy.get('[data-test="inputSenha"]').type('Senha123');
         cy.get('[data-test="inputSenhaVerificada"]').type('Senha123');
         cy.get('.sc-bcXHqe').click();
-        cy.contains('h2', 'Agora, os dados técnicos:')
+        cy.contains('h2', 'Agora, os dados técnicos:').should('be.visible');
+        cy.get('.sc-laZRCg').should('exist').should('be.visible');
+    })
+    
 
     })
-
+context('Sessão de cadastro completa', ()=> {
     it('Cadastra uma clínica', () => {
         cy.get('[href="/cadastro"]').click();
         cy.get('[data-test="inputNome"]').type('Catarina P');
@@ -38,7 +44,10 @@ describe('Página de cadastro', () => {
         cy.get('[data-test="inputEstado"]').type('BA');
 
         cy.contains('Cadastrar').click()
+        cy.location('pathname').should('equal', '/login');
 
     })
+})
+    
 
 })
